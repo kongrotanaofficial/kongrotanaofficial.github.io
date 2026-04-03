@@ -105,7 +105,7 @@
                         <a href="#projects" class="btn btn-primary">
                             <i class="fas fa-laptop-code mr-2"></i> View Projects
                         </a>
-                        <a href="https://t.me/kongrotana_icckh" class="btn btn-secondary">
+                        <a href="https://t.me/rotana_oct" class="btn btn-secondary">
                             <i class="fas fa-paper-plane mr-2"></i> Contact Me
                         </a>
                     </div>
@@ -601,7 +601,7 @@
                     <div class="mt-10">
                         <h4 class="font-bold text-lg mb-4">Follow Me</h4>
                         <div class="flex space-x-4">
-                            <a href="https://www.facebook.com/rotana_oct" class="social-icon"><i class="fab fa-facebook"></i></a>
+                            <a href="https://www.facebook.com/krotanaofficial" class="social-icon"><i class="fab fa-facebook"></i></a>
                             <a href="https://www.youtube.com/@kongrotanaofficial" class="social-icon"><i class="fab fa-youtube"></i></a>
                             <a href="https://t.me/kongrotanaofficialchannel" class="social-icon"><i class="fab fa-telegram"></i></a>
                             <a href="https://www.tiktok.com/@kongrotanaofficial" class="social-icon"><i class="fab fa-tiktok"></i></a>
@@ -653,7 +653,7 @@
                     Crafting smart and efficient digital solutions through clean code and thoughtful design. Turning ideas into seamless, user-friendly applications that make a difference.
                 </p>
                 <div class="flex justify-center space-x-6 mb-8">
-                    <a href="https://www.facebook.com/kongrotana.icckh" class="social-icon"><i class="fab fa-facebook text-xl"></i></a>
+                    <a href="https://www.facebook.com/krotanaofficial" class="social-icon"><i class="fab fa-facebook text-xl"></i></a>
                     <a href="https://www.youtube.com/@kongrotanaofficial" class="social-icon"><i class="fab fa-youtube text-xl"></i></a>
                     <a href="https://t.me/kongrotanaofficialchannel" class="social-icon"><i class="fab fa-telegram text-xl"></i></a>
                     <a href="https://www.tiktok.com/@kongrotanaofficial" class="social-icon"><i class="fab fa-tiktok text-xl"></i></a>
@@ -669,6 +669,26 @@
             </div>
         </div>
     </footer>
+
+    <!-- Go to Top Button -->
+    <button id="goToTopBtn" title="Go to top" class="go-to-top-btn" aria-label="Go to top of page">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // Go to Top Button functionality
+        const goToTopBtn = document.getElementById('goToTopBtn');
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                goToTopBtn.style.display = 'flex';
+            } else {
+                goToTopBtn.style.display = 'none';
+            }
+        });
+        goToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
 
 </body>
 <script src="./script/script.js"></script>
