@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chemistry Match · Science Puzzle Game | Rotana.dev</title>
+    <meta name="description" content="Master chemical elements, valence bonds, and reaction formulas through an addictive, gamified science matching game on Android and Windows.">
+    <link rel="icon" href="../img/appicon_chemistry_match.png" type="image/png">
+    <link rel="stylesheet" href="../style/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .native-window {
+            background: var(--card-surface);
+            backdrop-filter: blur(28px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+            overflow: hidden;
+        }
+        .window-header {
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .traffic-dots { display: flex; align-items: center; gap: 7px; }
+        .traffic-dot { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
+        .dot-red { background: #ff5f56; box-shadow: 0 0 8px rgba(255, 95, 86, 0.5); }
+        .dot-yellow { background: #ffbd2e; box-shadow: 0 0 8px rgba(255, 189, 46, 0.5); }
+        .dot-green { background: #27c93f; box-shadow: 0 0 8px rgba(39, 201, 63, 0.5); }
+
+        .feature-card {
+            background: var(--card-surface);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            backdrop-filter: blur(16px);
+            position: relative;
+            overflow: hidden;
+        }
+        .feature-card:hover {
+            border-color: var(--neon-cyan);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0, 245, 255, 0.15);
+        }
+        .spec-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            font-size: 0.88rem;
+        }
+        .spec-item:last-child { border-bottom: none; }
+        .spec-label { color: #8892a4; font-family: 'JetBrains Mono', monospace; }
+        .spec-val { color: #fff; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+
+        .app-hero-icon {
+            width: 110px;
+            height: 110px;
+            border-radius: 28px;
+            object-fit: cover;
+            box-shadow: 0 15px 35px rgba(0, 245, 255, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            border: 2px solid rgba(0, 245, 255, 0.4);
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-100 selection:bg-cyan-500/30 selection:text-cyan-200">
+    <div class="animated-bg"></div>
+
+    <!-- ═══ NAV BAR ═══ -->
+    <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <a href="../index.html" class="flex items-center gap-3 group text-decoration-none">
+                    <div class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 group-hover:scale-105 transition-transform shadow-[0_0_15px_rgba(0,245,255,0.2)]">
+                        <i class="fas fa-terminal text-sm"></i>
+                    </div>
+                    <div>
+                        <span class="font-mono text-base font-bold text-white group-hover:text-cyan-400 transition-colors">Rotana<span class="text-cyan-400">.dev</span></span>
+                        <div class="text-[10px] font-mono text-slate-400 -mt-1">Native Platform Portfolio</div>
+                    </div>
+                </a>
+
+                <div class="flex items-center gap-3">
+                    <a href="../index.html#apps" class="nav-link flex items-center gap-2">
+                        <i class="fas fa-arrow-left text-xs"></i>
+                        <span>Back to Apps</span>
+                    </a>
+                    <a href="https://buymeacoffee.com/kongrotana" target="_blank" rel="noopener noreferrer" class="btn-coffee hidden sm:inline-flex" title="Support on Buy Me a Coffee">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 5h-2V5h2v3zM4 19h16v2H4z"/></svg>
+                        <span>Buy Coffee</span>
+                    </a>
+                    <button id="themeToggleBtn" class="theme-toggle relative !top-0 !right-0" title="Toggle Theme" aria-label="Toggle dark/light theme">
+                        <svg class="sun-icon hidden" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                        <svg class="moon-icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="pt-32 pb-24">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+
+            <!-- Breadcrumb Navigation -->
+            <div class="flex items-center gap-2 text-xs font-mono text-slate-400 mb-8">
+                <a href="../index.html" class="hover:text-cyan-400 transition-colors">Home</a>
+                <span>/</span>
+                <a href="../index.html#apps" class="hover:text-cyan-400 transition-colors">Production Apps</a>
+                <span>/</span>
+                <span class="text-cyan-400 font-semibold">Chemistry Match</span>
+            </div>
+
+            <!-- ═══ APP SHOWCASE HERO ═══ -->
+            <div class="native-window mb-12 p-8 sm:p-12 relative">
+                <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                        <img src="../img/appicon_chemistry_match.png" alt="Chemistry Match" class="app-hero-icon flex-shrink-0">
+                        <div>
+                            <!-- Badges -->
+                            <div class="flex flex-wrap items-center gap-2 mb-3">
+                                <span class="status-badge live" title="Live on Google Play Store">
+                                    <span class="status-dot"></span>Google Play Live
+                                </span>
+                                <span class="status-badge live" title="Live on Microsoft Store">
+                                    <span class="status-dot"></span>Microsoft Store Live
+                                </span>
+                                <span class="text-xs font-mono text-cyan-400/80 px-2.5 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/20">
+                                    Dual Live Production
+                                </span>
+                            </div>
+
+                            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-2 tracking-tight">
+                                Chemistry Match
+                            </h1>
+                            <p class="text-base sm:text-lg font-mono text-cyan-400 mb-4">
+                                Interactive Chemical Science Game · Android &amp; Windows Desktop
+                            </p>
+                            <p class="text-slate-300 text-sm sm:text-base max-w-2xl leading-relaxed">
+                                Engaging and educational chemical formula and element matching game. Master chemical symbols, atomic numbers, valence bonds, and reaction balance through fun, addictive puzzle mechanics and progressive level challenges across both Android and PC.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Direct Store Buttons -->
+                    <div class="flex flex-col sm:flex-row lg:flex-col gap-3 w-full lg:w-auto flex-shrink-0">
+                        <a href="https://play.google.com/store/apps/details?id=com.kongrotana.chemistry_match" target="_blank" rel="noopener noreferrer" class="store-btn google-play !py-3.5 !px-6 text-sm justify-center shadow-[0_0_20px_rgba(66,133,244,0.3)] hover:scale-105 transition-transform" title="Download on Google Play">
+                            <svg viewBox="0 0 24 24" class="w-6 h-6">
+                                <path fill="#4285F4" d="M3.609 1.813L13.792 12 3.61 22.187a2.26 2.26 0 0 1-.22-.988V2.8a2.27 2.27 0 0 1 .22-.987z"/>
+                                <path fill="#FBBC04" d="M17.202 8.59L13.792 12l3.41 3.41 3.86-2.227a1.44 1.44 0 0 0 0-2.366L17.2 8.59z"/>
+                                <path fill="#EA4335" d="M3.609 1.813L17.202 8.59 13.792 12 3.61 1.813z"/>
+                                <path fill="#34A853" d="M13.792 12l3.41 3.41-13.593 6.777L13.792 12z"/>
+                            </svg>
+                            <div class="btn-text">
+                                <small>GET IT ON</small>
+                                <span class="text-base font-bold">Google Play</span>
+                            </div>
+                        </a>
+
+                        <a href="https://apps.microsoft.com/search?query=Chemistry+Match" target="_blank" rel="noopener noreferrer" class="store-btn ms-store !py-3.5 !px-6 text-sm justify-center shadow-[0_0_20px_rgba(0,164,239,0.3)] hover:scale-105 transition-transform" title="Download on Microsoft Store">
+                            <svg viewBox="0 0 24 24" class="w-6 h-6">
+                                <rect x="1" y="1" width="10" height="10" fill="#F25022"/>
+                                <rect x="13" y="1" width="10" height="10" fill="#7FBA00"/>
+                                <rect x="1" y="13" width="10" height="10" fill="#00A4EF"/>
+                                <rect x="13" y="13" width="10" height="10" fill="#FFB900"/>
+                            </svg>
+                            <div class="btn-text">
+                                <small>GET IT FROM</small>
+                                <span class="text-base font-bold">Microsoft Store</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Platform Tag Pills -->
+                <div class="mt-8 pt-6 border-t border-white/10 flex flex-wrap gap-2">
+                    <span class="px-3 py-1 rounded-lg text-xs font-mono bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">Windows Desktop (.MSIX)</span>
+                    <span class="px-3 py-1 rounded-lg text-xs font-mono bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">Android 7.0 - 15</span>
+                    <span class="px-3 py-1 rounded-lg text-xs font-mono bg-white/5 border border-white/10 text-slate-300">Periodic Table (118 Elements)</span>
+                    <span class="px-3 py-1 rounded-lg text-xs font-mono bg-white/5 border border-white/10 text-slate-300">Valence Bond Matching</span>
+                    <span class="px-3 py-1 rounded-lg text-xs font-mono bg-white/5 border border-white/10 text-slate-300">Offline STEM Learning</span>
+                </div>
+            </div>
+
+            <!-- ═══ NATIVE VISUAL PREVIEW ═══ -->
+            <div class="native-window mb-16">
+                <div class="window-header">
+                    <div class="traffic-dots">
+                        <span class="traffic-dot dot-red"></span>
+                        <span class="traffic-dot dot-yellow"></span>
+                        <span class="traffic-dot dot-green"></span>
+                    </div>
+                    <div class="text-xs font-mono text-slate-400 flex items-center gap-2">
+                        <i class="fas fa-atom text-[10px] text-cyan-400"></i>
+                        <span>Chemistry Match · Gameplay Mechanics &amp; Visual Physics</span>
+                    </div>
+                    <div class="text-xs font-mono text-slate-500">Cross-Platform Engine</div>
+                </div>
+
+                <div class="p-8 sm:p-12">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+                        <div>
+                            <div class="text-xs font-mono text-cyan-400 uppercase tracking-widest mb-2">// LEARNING THROUGH GAMIFICATION</div>
+                            <h2 class="text-2xl sm:text-3xl font-bold text-white mb-4">Turn Chemical Formulas into Addictive Gameplay</h2>
+                            <p class="text-slate-300 text-sm leading-relaxed mb-4">
+                                Memorizing chemical symbols, valence numbers, and bonding pairs has traditionally been rote and tedious for STEM students.
+                            </p>
+                            <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                                <strong class="text-cyan-400">Chemistry Match</strong> gamifies the periodic table through tactile tile connections. Players match reactive cations and anions (such as Na⁺ + Cl⁻ → NaCl, or H⁺ + OH⁻ → H₂O), navigate element families (alkali metals, halogens, noble gases), and trigger combo chains that reinforce real chemical rules.
+                            </p>
+
+                            <div class="space-y-3">
+                                <div class="flex items-center gap-3 text-sm text-slate-200">
+                                    <div class="w-6 h-6 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-xs flex-shrink-0">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <span>Authentic IUPAC chemical nomenclature and atomic numbers</span>
+                                </div>
+                                <div class="flex items-center gap-3 text-sm text-slate-200">
+                                    <div class="w-6 h-6 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-xs flex-shrink-0">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <span>Haptic touch feedback and dynamic particle reaction bursts</span>
+                                </div>
+                                <div class="flex items-center gap-3 text-sm text-slate-200">
+                                    <div class="w-6 h-6 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-xs flex-shrink-0">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <span>Daily challenges, endless modes, and timed arcade challenges</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-center">
+                            <div class="relative max-w-sm rounded-2xl overflow-hidden shadow-2xl border border-cyan-500/30 group">
+                                <img src="../img/Chemistry.jpg" alt="Chemistry Match Interface" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500">
+                                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-60"></div>
+                                <div class="absolute bottom-4 left-4 right-4 p-3 rounded-xl bg-slate-950/80 backdrop-blur-md border border-white/10 text-xs font-mono text-center text-cyan-300">
+                                    Interactive Formula Balancing Engine
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ KEY FEATURES GRID ═══ -->
+            <div class="mb-16">
+                <div class="text-center max-w-2xl mx-auto mb-12">
+                    <div class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-2">// CORE PILLARS</div>
+                    <h2 class="text-3xl font-bold text-white">Fun, Educational &amp; Scientifically Sound</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="feature-card">
+                        <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-xl mb-4">
+                            <i class="fas fa-flask"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">118 Periodic Elements</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Comprehensive element catalog featuring atomic mass, electron configurations, electronegativity, and discovery history.
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 text-xl mb-4">
+                            <i class="fas fa-gamepad"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">Multiple Game Modes</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Switch between relaxing Zen learning, progressive grade levels, time attack leaderboards, and complex molecular builder quests.
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="w-12 h-12 rounded-xl bg-green-500/10 border border-green-500/30 flex items-center justify-center text-green-400 text-xl mb-4">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">Achievement System</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Earn trophies, unlock custom chemical flasks, and level up from Chem Apprentice to Nobel Laureate.
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="w-12 h-12 rounded-xl bg-pink-500/10 border border-pink-500/30 flex items-center justify-center text-pink-400 text-xl mb-4">
+                            <i class="fas fa-desktop"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">Cross-Platform Sync</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Enjoy native performance whether you're playing on your Android phone on the commute or on your high-refresh Windows PC at home.
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-xl mb-4">
+                            <i class="fas fa-music"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">Ambient Sci-Fi Audio</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Custom atmospheric soundscapes, elemental SFX, and soothing background chords tailored for intense puzzle focus.
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 text-xl mb-4">
+                            <i class="fas fa-universal-access"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">Student &amp; Classroom Friendly</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            No inappropriate popups or invasive ads. Fully safe for young students, schools, and chemistry laboratory clubs.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ TECHNICAL SPECS & SYSTEM COMPATIBILITY ═══ -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+                <div class="native-window p-8">
+                    <div class="text-xs font-mono text-cyan-400 uppercase tracking-widest mb-4">// ARCHITECTURE &amp; TECH STACK</div>
+                    <div class="space-y-4">
+                        <div class="spec-item">
+                            <span class="spec-label">Framework</span>
+                            <span class="spec-val text-cyan-400">Flutter / Flame Gaming Engine</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Target Platforms</span>
+                            <span class="spec-val">Android (Google Play) &amp; Windows (MS Store)</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Physics Engine</span>
+                            <span class="spec-val">Custom 2D Particle Matrix</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Android ID</span>
+                            <span class="spec-val text-xs text-slate-300">com.kongrotana.chemistry_match</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Architect &amp; Dev</span>
+                            <span class="spec-val text-white">Kong Rotana</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="native-window p-8">
+                    <div class="text-xs font-mono text-purple-400 uppercase tracking-widest mb-4">// COMPATIBILITY &amp; REQUIREMENTS</div>
+                    <div class="space-y-4">
+                        <div class="spec-item">
+                            <span class="spec-label">Android Requirements</span>
+                            <span class="spec-val">Android 7.0+ (ARMv7, ARM64, x86_64)</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Windows Requirements</span>
+                            <span class="spec-val">Windows 10 / 11 (x64, ARM64)</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Graphics Standard</span>
+                            <span class="spec-val">OpenGL ES 3.0 / Vulkan / DirectX 11</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Storage Space</span>
+                            <span class="spec-val">~32 MB</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Network Play</span>
+                            <span class="spec-val text-green-400">Offline Supported (Leaderboards optional)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ CROSS NAVIGATION / OTHER APPS ═══ -->
+            <div class="native-window p-8 text-center">
+                <div class="text-xs font-mono text-slate-400 uppercase tracking-widest mb-3">// EXPLORE MORE CREATIONS</div>
+                <h3 class="text-2xl font-bold text-white mb-6">Discover Other Production Apps by Rotana</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-left">
+                    <a href="kh-book-label-maker.html" class="p-4 rounded-xl border border-white/10 hover:border-cyan-500/50 bg-white/5 hover:bg-cyan-500/5 transition-all group">
+                        <div class="flex items-center gap-3 mb-2">
+                            <img src="../img/app_icon_kh_book_label_maker.png" class="w-10 h-10 rounded-lg object-cover">
+                            <div>
+                                <h4 class="font-bold text-sm text-white group-hover:text-cyan-400 transition-colors">KH Book Label Maker</h4>
+                                <div class="text-[11px] font-mono text-slate-400">Microsoft Store Live</div>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-400">Khmer student book label generator with authentic traditional Kbach frames.</p>
+                    </a>
+
+                    <a href="cv-builder-pro.html" class="p-4 rounded-xl border border-white/10 hover:border-purple-500/50 bg-white/5 hover:bg-purple-500/5 transition-all group">
+                        <div class="flex items-center gap-3 mb-2">
+                            <img src="../img/appicon_CV_builder_Pro.png" class="w-10 h-10 rounded-lg object-cover">
+                            <div>
+                                <h4 class="font-bold text-sm text-white group-hover:text-purple-400 transition-colors">CV Builder Pro</h4>
+                                <div class="text-[11px] font-mono text-slate-400">Google Play Live</div>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-400">Professional resume maker with ATS-ready templates and instant PDF.</p>
+                    </a>
+
+                    <a href="khmer-frame-name-maker.html" class="p-4 rounded-xl border border-white/10 hover:border-pink-500/50 bg-white/5 hover:bg-pink-500/5 transition-all group">
+                        <div class="flex items-center gap-3 mb-2">
+                            <img src="../img/app_icon_khmer_frame_Name_Maker.png" class="w-10 h-10 rounded-lg object-cover">
+                            <div>
+                                <h4 class="font-bold text-sm text-white group-hover:text-pink-400 transition-colors">Khmer Frame Name</h4>
+                                <div class="text-[11px] font-mono text-slate-400">Google Play Live</div>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-400">Personalized Khmer name typography with authentic cultural borders.</p>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer class="py-12 border-t border-white/10 bg-slate-950/80">
+        <div class="container mx-auto px-4 text-center">
+            <div class="flex items-center justify-center gap-3 mb-4">
+                <a href="../index.html" class="font-mono text-lg font-bold text-white hover:text-cyan-400 transition-colors">
+                    Rotana<span class="text-cyan-400">.dev</span>
+                </a>
+            </div>
+            <p class="text-slate-400 text-xs font-mono mb-4">
+                © <span id="currentYear"></span> Kong Rotana. All rights reserved. · 
+                <a href="PrivacyPolicy.html" class="text-cyan-400 hover:underline">Privacy Policy</a> · 
+                <a href="TermsOfService.html" class="text-cyan-400 hover:underline">Terms of Service</a>
+            </p>
+            <div class="flex justify-center gap-4 text-sm text-slate-400">
+                <a href="https://play.google.com/store/apps/details?id=com.kongrotana.chemistry_match" target="_blank" class="hover:text-white transition-colors">
+                    <i class="fab fa-google-play mr-1"></i> Google Play
+                </a>
+                <span>•</span>
+                <a href="https://apps.microsoft.com/search?query=Chemistry+Match" target="_blank" class="hover:text-white transition-colors">
+                    <i class="fab fa-microsoft mr-1"></i> MS Store
+                </a>
+                <span>•</span>
+                <a href="https://buymeacoffee.com/kongrotana" target="_blank" class="hover:text-amber-400 transition-colors">
+                    <i class="fas fa-coffee mr-1"></i> Buy Me a Coffee
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        const themeBtn = document.getElementById('themeToggleBtn');
+        const html = document.documentElement;
+        const sun = themeBtn.querySelector('.sun-icon');
+        const moon = themeBtn.querySelector('.moon-icon');
+
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        applyTheme(savedTheme);
+
+        themeBtn.addEventListener('click', () => {
+            const current = html.getAttribute('data-theme') || 'dark';
+            const next = current === 'dark' ? 'light' : 'dark';
+            applyTheme(next);
+            localStorage.setItem('theme', next);
+        });
+
+        function applyTheme(theme) {
+            html.setAttribute('data-theme', theme);
+            if (theme === 'light') {
+                sun.classList.remove('hidden');
+                moon.classList.add('hidden');
+            } else {
+                sun.classList.add('hidden');
+                moon.classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+</html>

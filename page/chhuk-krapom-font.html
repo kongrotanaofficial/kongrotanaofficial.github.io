@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chhuk Krapom Font · Cultural Khmer Typography | Rotana.dev</title>
+    <meta name="description" content="Distinctive Khmer digital typeface crafted by Kong Rotana to elevate readability and celebrate Cambodian typographic heritage in print and screens.">
+    <link rel="icon" href="../img/Chhukkrapom.png" type="image/png">
+    <link rel="stylesheet" href="../style/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .native-window {
+            background: var(--card-surface);
+            backdrop-filter: blur(28px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+            overflow: hidden;
+        }
+        .window-header {
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .traffic-dots { display: flex; align-items: center; gap: 7px; }
+        .traffic-dot { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        .feature-card {
+            background: var(--card-surface);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            backdrop-filter: blur(16px);
+        }
+        .feature-card:hover {
+            border-color: #bf00ff;
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(191, 0, 255, 0.15);
+        }
+        .khmer-sample-box {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-100 selection:bg-purple-500/30 selection:text-purple-200">
+    <div class="animated-bg"></div>
+
+    <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <a href="../index.html" class="flex items-center gap-3 group text-decoration-none">
+                    <div class="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 group-hover:scale-105 transition-transform shadow-[0_0_15px_rgba(191,0,255,0.2)]">
+                        <i class="fas fa-terminal text-sm"></i>
+                    </div>
+                    <div>
+                        <span class="font-mono text-base font-bold text-white group-hover:text-purple-400 transition-colors">Rotana<span class="text-purple-400">.dev</span></span>
+                        <div class="text-[10px] font-mono text-slate-400 -mt-1">Native Platform Portfolio</div>
+                    </div>
+                </a>
+
+                <div class="flex items-center gap-3">
+                    <a href="../index.html#projects" class="nav-link flex items-center gap-2">
+                        <i class="fas fa-arrow-left text-xs"></i>
+                        <span>Back to Projects</span>
+                    </a>
+                    <a href="https://buymeacoffee.com/kongrotana" target="_blank" rel="noopener noreferrer" class="btn-coffee hidden sm:inline-flex" title="Support on Buy Me a Coffee">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 5h-2V5h2v3zM4 19h16v2H4z"/></svg>
+                        <span>Buy Coffee</span>
+                    </a>
+                    <button id="themeToggleBtn" class="theme-toggle relative !top-0 !right-0" title="Toggle Theme">
+                        <svg class="sun-icon hidden" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                        <svg class="moon-icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="pt-32 pb-24">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+
+            <div class="flex items-center gap-2 text-xs font-mono text-slate-400 mb-8">
+                <a href="../index.html" class="hover:text-purple-400 transition-colors">Home</a>
+                <span>/</span>
+                <a href="../index.html#projects" class="hover:text-purple-400 transition-colors">Systems &amp; Creative Works</a>
+                <span>/</span>
+                <span class="text-purple-400 font-semibold">Chhuk Krapom Font</span>
+            </div>
+
+            <!-- Hero -->
+            <div class="native-window mb-12 p-8 sm:p-12">
+                <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                        <img src="../img/Chhukkrapom.png" alt="Chhuk Krapom Font" class="w-24 h-24 rounded-2xl object-cover border-2 border-purple-400/40 shadow-lg flex-shrink-0">
+                        <div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="status-badge live"><span class="status-dot"></span>Typeface Design</span>
+                                <span class="text-xs font-mono text-purple-400 px-2 py-0.5 rounded-full bg-purple-500/10 border border-purple-500/30">OpenType · Unicode 15.0</span>
+                            </div>
+                            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-2">
+                                Chhuk Krapom Font (ពុម្ពអក្សរឈូកក្រពុំ)
+                            </h1>
+                            <p class="text-base sm:text-lg font-mono text-purple-400 mb-4">
+                                Contemporary Khmer Digital Typography Crafted for High Legibility
+                            </p>
+                            <p class="text-slate-300 text-sm sm:text-base max-w-2xl leading-relaxed">
+                                A distinctive digital typeface designed by Kong Rotana celebrating the organic curves of the lotus bud ("Chhuk Krapom"). Engineered to provide crystal-clear readability across both low-density displays and luxury high-resolution print.
+                            </p>
+                        </div>
+                    </div>
+
+                    <a href="../index.html#contact" class="btn btn-primary !py-3.5 !px-6 flex items-center justify-center gap-2 flex-shrink-0">
+                        <i class="fas fa-download text-lg"></i>
+                        <span>Inquire Font Licensing</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Specimen Display -->
+            <div class="khmer-sample-box mb-16">
+                <div class="text-xs font-mono text-purple-400 uppercase tracking-widest mb-3">// TYPE SPECIMEN</div>
+                <div class="text-3xl sm:text-5xl font-bold text-white mb-4 leading-relaxed">
+                    ភាសាខ្មែរជាព្រលឹងជាតិ វប្បធម៌ខ្មែររុងរឿង
+                </div>
+                <div class="text-lg text-slate-300 mb-6 font-mono">
+                    ក ខ គ ឃ ង · ច ឆ ជ ឈ ញ · ដ ឋ ឌ ឍ ណ · ត ថ ទ ធ ន · ប ផ ព ភ ម · យ រ ល វ ស ហ ឡ អ
+                </div>
+                <p class="text-xs text-slate-400 max-w-xl mx-auto">
+                    Engineered with balanced ascenders and descenders to avoid overlapping subscripts and vowels in dense body paragraphs.
+                </p>
+            </div>
+
+            <!-- Highlights -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+                <div class="feature-card">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 text-xl mb-4">
+                        <i class="fas fa-bezier-curve"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Organic Lotus Geometry</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Inspired by the blooming lotus petal, each stem and terminal curve carries balanced tension and cultural warmth.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-xl mb-4">
+                        <i class="fas fa-vector-square"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Flawless OpenType Tables</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Custom GSUB and GPOS lookup tables accurately handle complex Khmer consonant stacking (coeng) without clipping.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="w-12 h-12 rounded-xl bg-pink-500/10 border border-pink-500/30 flex items-center justify-center text-pink-400 text-xl mb-4">
+                        <i class="fas fa-display"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Web &amp; App Embedded</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Optimized in TTF, OTF, and WOFF2 formats with minimal file footprints for blazing fast load times on modern websites and apps.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="py-12 border-t border-white/10 bg-slate-950/80">
+        <div class="container mx-auto px-4 text-center">
+            <a href="../index.html" class="font-mono text-lg font-bold text-white hover:text-purple-400 transition-colors">
+                Rotana<span class="text-purple-400">.dev</span>
+            </a>
+            <p class="text-slate-400 text-xs font-mono mt-2 mb-4">© <span id="currentYear"></span> Kong Rotana. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        const themeBtn = document.getElementById('themeToggleBtn');
+        const html = document.documentElement;
+        const sun = themeBtn.querySelector('.sun-icon');
+        const moon = themeBtn.querySelector('.moon-icon');
+
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        applyTheme(savedTheme);
+
+        themeBtn.addEventListener('click', () => {
+            const current = html.getAttribute('data-theme') || 'dark';
+            const next = current === 'dark' ? 'light' : 'dark';
+            applyTheme(next);
+            localStorage.setItem('theme', next);
+        });
+
+        function applyTheme(theme) {
+            html.setAttribute('data-theme', theme);
+            if (theme === 'light') {
+                sun.classList.remove('hidden');
+                moon.classList.add('hidden');
+            } else {
+                sun.classList.add('hidden');
+                moon.classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -69,20 +69,43 @@
     <header id="header" class="glass-panel backdrop-blur-md fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-3">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
-                <a href="../index.html#home" class="text-2xl font-bold text-primary flex items-center" style="font-family:'JetBrains Mono',monospace;">
-                    <i class="fas fa-code mr-2"></i>Rotana.dev
+                <!-- Brand / Home Link -->
+                <a href="../index.html" class="flex items-center gap-3 group text-decoration-none">
+                    <div class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 group-hover:scale-105 transition-transform shadow-[0_0_15px_rgba(0,245,255,0.2)]">
+                        <i class="fas fa-terminal text-sm"></i>
+                    </div>
+                    <div>
+                        <span class="font-mono text-base font-bold text-white group-hover:text-cyan-400 transition-colors">Rotana<span class="text-cyan-400">.dev</span></span>
+                        <div class="text-[10px] font-mono text-slate-400 -mt-1">Native Platform Portfolio</div>
+                    </div>
                 </a>
                 <nav class="hidden md:flex space-x-2">
-                    <a href="../index.html#home"          class="nav-link active" data-section="home">Home</a>
+                    <a href="../index.html#home"          class="nav-link" data-section="home">Home</a>
+                    <a href="../index.html#apps"          class="nav-link" data-section="apps">Apps</a>
                     <a href="../index.html#projects"      class="nav-link" data-section="projects">Projects</a>
                     <a href="../index.html#code-generator" class="nav-link" data-section="code-generator">Tools</a>
-                    <a href="../index.html#telegram-bots" class="nav-link" data-section="telegram-bots">Telegram Bots</a>
+                    <a href="../index.html#telegram-bots" class="nav-link" data-section="telegram-bots">Bots</a>
                     <a href="../index.html#about"         class="nav-link" data-section="about">About</a>
-                    <a href="../index.html#experience"    class="nav-link" data-section="experience">Experience</a>
                     <a href="../index.html#contact"       class="nav-link" data-section="contact">Contact</a>
                 </nav>
-                <div class="md:hidden">
-                    <button id="mobile-menu-button" class="focus:outline-none">
+                <div class="hidden md:flex items-center space-x-3">
+                    <a href="https://buymeacoffee.com/kongrotana" target="_blank" rel="noopener noreferrer" class="btn-coffee btn-coffee-nav" title="Support Rotana on Buy Me a Coffee">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 5h-2V5h2v3zM4 19h16v2H4z"/></svg>
+                        <span>Buy Coffee</span>
+                    </a>
+                    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle dark/light theme">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="md:hidden flex items-center space-x-2">
+                    <button class="theme-toggle theme-toggle-mobile" aria-label="Toggle theme" title="Toggle dark/light theme">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                    </button>
+                    <button id="mobile-menu-button" class="focus:outline-none p-1">
                         <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="color:#8892a4;">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/>
                         </svg>
@@ -92,29 +115,14 @@
         </div>
         <div id="mobile-menu" class="md:hidden hidden backdrop-blur-lg shadow-xl">
             <a href="../index.html#home"          class="block px-6 py-4 text-base data-section-mobile" data-section="home">Home</a>
+            <a href="../index.html#apps"          class="block px-6 py-4 text-base data-section-mobile" data-section="apps">Apps</a>
             <a href="../index.html#projects"      class="block px-6 py-4 text-base data-section-mobile" data-section="projects">Projects</a>
             <a href="../index.html#code-generator" class="block px-6 py-4 text-base data-section-mobile" data-section="code-generator">Tools</a>
             <a href="../index.html#telegram-bots" class="block px-6 py-4 text-base data-section-mobile" data-section="telegram-bots">Telegram Bots</a>
             <a href="../index.html#about"         class="block px-6 py-4 text-base data-section-mobile" data-section="about">About</a>
-            <a href="../index.html#experience"    class="block px-6 py-4 text-base data-section-mobile" data-section="experience">Experience</a>
             <a href="../index.html#contact"       class="block px-6 py-4 text-base data-section-mobile" data-section="contact">Contact</a>
         </div>
     </header>
-
-    <!-- Theme Toggle -->
-    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="12" cy="12" r="5"></circle>
-            <line x1="12" y1="1" x2="12" y2="3"></line>
-            <line x1="12" y1="21" x2="12" y2="23"></line>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-            <line x1="1" y1="12" x2="3" y2="12"></line>
-            <line x1="21" y1="12" x2="23" y2="12"></line>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-        </svg>
-    </button>
 
     <!-- Content -->
     <section id="privacy-policy" class="min-h-screen py-24 fade-in appear">

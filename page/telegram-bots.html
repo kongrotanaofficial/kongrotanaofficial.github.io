@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Bot Automation Suite | Rotana.dev</title>
+    <meta name="description" content="Intelligent Telegram bots built with Python for instant STEM problem solving, OCR Khmer text extraction, audio conversion, and group management.">
+    <link rel="icon" href="../img/Telegrambot.png" type="image/png">
+    <link rel="stylesheet" href="../style/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .native-window {
+            background: var(--card-surface);
+            backdrop-filter: blur(28px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+            overflow: hidden;
+        }
+        .window-header {
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .traffic-dots { display: flex; align-items: center; gap: 7px; }
+        .traffic-dot { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        .bot-grid-card {
+            background: var(--card-surface);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            backdrop-filter: blur(16px);
+            display: flex;
+            flex-direction: column;
+        }
+        .bot-grid-card:hover {
+            border-color: #24A1DE;
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(36, 161, 222, 0.2);
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-100 selection:bg-sky-500/30 selection:text-sky-200">
+    <div class="animated-bg"></div>
+
+    <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <a href="../index.html" class="flex items-center gap-3 group text-decoration-none">
+                    <div class="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400 group-hover:scale-105 transition-transform shadow-[0_0_15px_rgba(36,161,222,0.2)]">
+                        <i class="fas fa-terminal text-sm"></i>
+                    </div>
+                    <div>
+                        <span class="font-mono text-base font-bold text-white group-hover:text-sky-400 transition-colors">Rotana<span class="text-sky-400">.dev</span></span>
+                        <div class="text-[10px] font-mono text-slate-400 -mt-1">Native Platform Portfolio</div>
+                    </div>
+                </a>
+
+                <div class="flex items-center gap-3">
+                    <a href="../index.html#projects" class="nav-link flex items-center gap-2">
+                        <i class="fas fa-arrow-left text-xs"></i>
+                        <span>Back to Projects</span>
+                    </a>
+                    <a href="https://buymeacoffee.com/kongrotana" target="_blank" rel="noopener noreferrer" class="btn-coffee hidden sm:inline-flex" title="Support on Buy Me a Coffee">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 5h-2V5h2v3zM4 19h16v2H4z"/></svg>
+                        <span>Buy Coffee</span>
+                    </a>
+                    <button id="themeToggleBtn" class="theme-toggle relative !top-0 !right-0" title="Toggle Theme" aria-label="Toggle dark/light theme">
+                        <svg class="sun-icon hidden" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                        <svg class="moon-icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="pt-32 pb-24">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+
+            <div class="flex items-center gap-2 text-xs font-mono text-slate-400 mb-8">
+                <a href="../index.html" class="hover:text-sky-400 transition-colors">Home</a>
+                <span>/</span>
+                <a href="../index.html#projects" class="hover:text-sky-400 transition-colors">Systems &amp; Creative Works</a>
+                <span>/</span>
+                <span class="text-sky-400 font-semibold">Telegram Bot Suite</span>
+            </div>
+
+            <!-- Hero -->
+            <div class="native-window mb-12 p-8 sm:p-12">
+                <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                        <img src="../img/Telegrambot.png" alt="Telegram Bots" class="w-24 h-24 rounded-2xl object-cover border-2 border-sky-400/40 shadow-lg flex-shrink-0">
+                        <div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="status-badge live"><span class="status-dot"></span>9 Production Bots Active</span>
+                                <span class="text-xs font-mono text-sky-400 px-2 py-0.5 rounded-full bg-sky-500/10 border border-sky-500/30">Python 3.11 · AsyncIO</span>
+                            </div>
+                            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-2">
+                                Telegram Bot Automation Suite
+                            </h1>
+                            <p class="text-base sm:text-lg font-mono text-sky-400 mb-4">
+                                Intelligent Asynchronous Utilities Powered by Python
+                            </p>
+                            <p class="text-slate-300 text-sm sm:text-base max-w-2xl leading-relaxed">
+                                An ecosystem of specialized Telegram bots serving thousands of users across Cambodia and worldwide. Ranging from step-by-step math solvers and chemistry balance engines to Khmer OCR text extraction, media conversion, and automated reactions.
+                            </p>
+                        </div>
+                    </div>
+
+                    <a href="https://t.me/kongrotanaofficialchannel" target="_blank" rel="noopener noreferrer" class="btn btn-primary !py-3.5 !px-6 flex items-center justify-center gap-2 flex-shrink-0">
+                        <i class="fab fa-telegram text-lg"></i>
+                        <span>Join Telegram Channel</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Bots Grid -->
+            <div class="mb-16">
+                <div class="text-center max-w-2xl mx-auto mb-10">
+                    <div class="text-xs font-mono text-sky-400 uppercase tracking-widest mb-2">// ACTIVE BOT ROSTER</div>
+                    <h2 class="text-3xl font-bold text-white">Explore Available Telegram Bots</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Bot 1 -->
+                    <div class="bot-grid-card">
+                        <div class="flex items-center gap-4 mb-4">
+                            <img src="../img/Chemistry.jpg" class="w-14 h-14 rounded-full object-cover border border-sky-500/30">
+                            <div>
+                                <h3 class="font-bold text-white text-lg">ChemistryIQ</h3>
+                                <p class="text-xs font-mono text-green-400">@ChemistryIQBot</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-400 mb-6 flex-grow">
+                            Instant chemistry balance solver, periodic element lookup, molar mass calculator, and chemical reaction helper.
+                        </p>
+                        <a href="https://t.me/chemistryIQbot?start=_tgr_uVo1yeFhZGQ1" target="_blank" class="btn btn-primary w-full text-xs">
+                            <i class="fab fa-telegram mr-1.5"></i> Open in Telegram
+                        </a>
+                    </div>
+
+                    <!-- Bot 2 -->
+                    <div class="bot-grid-card">
+                        <div class="flex items-center gap-4 mb-4">
+                            <img src="../img/math.jpg" class="w-14 h-14 rounded-full object-cover border border-sky-500/30">
+                            <div>
+                                <h3 class="font-bold text-white text-lg">Math Bot</h3>
+                                <p class="text-xs font-mono text-green-400">@mathforubot</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-400 mb-6 flex-grow">
+                            Step-by-step solver for calculus, algebra, quadratic formulas, matrices, and geometry with clean notation output.
+                        </p>
+                        <a href="https://t.me/mathforubot?start=_tgr_wSLZ2hA3YTU1" target="_blank" class="btn btn-primary w-full text-xs">
+                            <i class="fab fa-telegram mr-1.5"></i> Open in Telegram
+                        </a>
+                    </div>
+
+                    <!-- Bot 3 -->
+                    <div class="bot-grid-card">
+                        <div class="flex items-center gap-4 mb-4">
+                            <img src="../img/text.jpg" class="w-14 h-14 rounded-full object-cover border border-sky-500/30">
+                            <div>
+                                <h3 class="font-bold text-white text-lg">Image to Text (OCR)</h3>
+                                <p class="text-xs font-mono text-green-400">@imagetotextkh_bot</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-400 mb-6 flex-grow">
+                            Extract text from screenshots and photos with high-accuracy bilingual Khmer and English OCR recognition.
+                        </p>
+                        <a href="https://t.me/imagetotextkh_bot?start=_tgr_OWiBxYo3M2Zl" target="_blank" class="btn btn-primary w-full text-xs">
+                            <i class="fab fa-telegram mr-1.5"></i> Open in Telegram
+                        </a>
+                    </div>
+
+                    <!-- Bot 4 -->
+                    <div class="bot-grid-card">
+                        <div class="flex items-center gap-4 mb-4">
+                            <img src="../img/audioext.jpg" class="w-14 h-14 rounded-full object-cover border border-sky-500/30">
+                            <div>
+                                <h3 class="font-bold text-white text-lg">Audio Extract</h3>
+                                <p class="text-xs font-mono text-green-400">@audioextbot</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-400 mb-6 flex-grow">
+                            Convert any video or voice clip into high-quality MP3 or M4A audio instantly with support up to 100MB files.
+                        </p>
+                        <a href="https://t.me/audioextbot?start=_tgr_OlAALgdlZjRl" target="_blank" class="btn btn-primary w-full text-xs">
+                            <i class="fab fa-telegram mr-1.5"></i> Open in Telegram
+                        </a>
+                    </div>
+
+                    <!-- Bot 5 -->
+                    <div class="bot-grid-card">
+                        <div class="flex items-center gap-4 mb-4">
+                            <img src="../img/color.jpg" class="w-14 h-14 rounded-full object-cover border border-sky-500/30">
+                            <div>
+                                <h3 class="font-bold text-white text-lg">Color Picker Bot</h3>
+                                <p class="text-xs font-mono text-green-400">@colorpickerkhbot</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-400 mb-6 flex-grow">
+                            Send any photo to extract dominant color palettes, HEX codes, RGB values, and CSS hsl color codes instantly.
+                        </p>
+                        <a href="https://t.me/colorpickerkhbot?start=_tgr_cVp6NTljZjM1" target="_blank" class="btn btn-primary w-full text-xs">
+                            <i class="fab fa-telegram mr-1.5"></i> Open in Telegram
+                        </a>
+                    </div>
+
+                    <!-- Bot 6 -->
+                    <div class="bot-grid-card">
+                        <div class="flex items-center gap-4 mb-4">
+                            <img src="../img/sticker.jpg" class="w-14 h-14 rounded-full object-cover border border-sky-500/30">
+                            <div>
+                                <h3 class="font-bold text-white text-lg">TG Sticker Downloader</h3>
+                                <p class="text-xs font-mono text-green-400">@khstickerdownloadbot</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-400 mb-6 flex-grow">
+                            Download Telegram static and animated sticker packs into transparent PNG, WebP, or GIF zip archives.
+                        </p>
+                        <a href="https://t.me/KHstickerdownloadbot?start=_tgr_GM1IYhs1Zjg1" target="_blank" class="btn btn-primary w-full text-xs">
+                            <i class="fab fa-telegram mr-1.5"></i> Open in Telegram
+                        </a>
+                    </div>
+
+                    <!-- Bot 7 -->
+                    <div class="bot-grid-card">
+                        <div class="flex items-center gap-4 mb-4">
+                            <img src="../img/eng.jpg" class="w-14 h-14 rounded-full object-cover border border-sky-500/30">
+                            <div>
+                                <h3 class="font-bold text-white text-lg">English Dictionary</h3>
+                                <p class="text-xs font-mono text-green-400">@Englishdictionarykhbot</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-400 mb-6 flex-grow">
+                            Definitions, phonetic pronunciation, audio examples, antonyms, and context sentences in English and Khmer.
+                        </p>
+                        <a href="https://t.me/Englishdictionarykhbot" target="_blank" class="btn btn-primary w-full text-xs">
+                            <i class="fab fa-telegram mr-1.5"></i> Open in Telegram
+                        </a>
+                    </div>
+
+                    <!-- Bot 8 -->
+                    <div class="bot-grid-card">
+                        <div class="flex items-center gap-4 mb-4">
+                            <img src="../img/reach.jpg" class="w-14 h-14 rounded-full object-cover border border-sky-500/30">
+                            <div>
+                                <h3 class="font-bold text-white text-lg">Auto Reach Heart</h3>
+                                <p class="text-xs font-mono text-green-400">@Auto_reachheartkh_bot</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-400 mb-6 flex-grow">
+                            Automatically reacts with relevant emojis to channel posts and group conversations based on sentiment analysis.
+                        </p>
+                        <a href="https://t.me/Auto_reachheartkh_bot?start=_tgr_zKJmV5w3Mjk1" target="_blank" class="btn btn-primary w-full text-xs">
+                            <i class="fab fa-telegram mr-1.5"></i> Open in Telegram
+                        </a>
+                    </div>
+
+                    <!-- Bot 9 -->
+                    <div class="bot-grid-card">
+                        <div class="flex items-center gap-4 mb-4">
+                            <img src="../img/yourinfo.jpg" class="w-14 h-14 rounded-full object-cover border border-sky-500/30">
+                            <div>
+                                <h3 class="font-bold text-white text-lg">Get Your Info</h3>
+                                <p class="text-xs font-mono text-green-400">@getyourinfobot</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-400 mb-6 flex-grow">
+                            Quick developer lookup returning your numerical Telegram Chat ID, DataCenter IP, username, and session metadata.
+                        </p>
+                        <a href="https://t.me/getyourinfobot?start=_tgr_XWkjaPU3OGNl" target="_blank" class="btn btn-primary w-full text-xs">
+                            <i class="fab fa-telegram mr-1.5"></i> Open in Telegram
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tech Details -->
+            <div class="native-window p-8">
+                <div class="text-xs font-mono text-sky-400 uppercase tracking-widest mb-4">// BOT ARCHITECTURE &amp; DEPLOYMENT</div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-slate-300">
+                    <div>
+                        <h4 class="font-bold text-white mb-2">Asynchronous Engine</h4>
+                        <p class="text-slate-400 leading-relaxed">
+                            Built with Python 3.11, <code class="text-sky-300 font-mono">python-telegram-bot</code> (v20+ async/await), and FastAPI webhooks for non-blocking concurrent request routing under heavy load.
+                        </p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-white mb-2">Security &amp; Cloud Reliability</h4>
+                        <p class="text-slate-400 leading-relaxed">
+                            Containerized with Docker, deployed on high-availability cloud VPS with automated health checks, rate limiting, and zero user data logging.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="py-12 border-t border-white/10 bg-slate-950/80">
+        <div class="container mx-auto px-4 text-center">
+            <a href="../index.html" class="font-mono text-lg font-bold text-white hover:text-sky-400 transition-colors">
+                Rotana<span class="text-sky-400">.dev</span>
+            </a>
+            <p class="text-slate-400 text-xs font-mono mt-2 mb-4">© <span id="currentYear"></span> Kong Rotana. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        const themeBtn = document.getElementById('themeToggleBtn');
+        const html = document.documentElement;
+        const sun = themeBtn.querySelector('.sun-icon');
+        const moon = themeBtn.querySelector('.moon-icon');
+
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        applyTheme(savedTheme);
+
+        themeBtn.addEventListener('click', () => {
+            const current = html.getAttribute('data-theme') || 'dark';
+            const next = current === 'dark' ? 'light' : 'dark';
+            applyTheme(next);
+            localStorage.setItem('theme', next);
+        });
+
+        function applyTheme(theme) {
+            html.setAttribute('data-theme', theme);
+            if (theme === 'light') {
+                sun.classList.remove('hidden');
+                moon.classList.add('hidden');
+            } else {
+                sun.classList.add('hidden');
+                moon.classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+</html>

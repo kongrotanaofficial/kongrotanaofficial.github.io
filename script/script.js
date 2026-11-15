@@ -5,132 +5,345 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
 // ═══════════════════════════════════════════
 // THEME TOGGLE
 // ═══════════════════════════════════════════
-const themeToggle = document.getElementById('theme-toggle');
 const htmlElement = document.documentElement;
 const currentTheme = localStorage.getItem('theme') || 'dark';
 htmlElement.setAttribute('data-theme', currentTheme);
-updateThemeIcon(currentTheme);
+updateThemeIcons(currentTheme);
 
-if (themeToggle) {
-    themeToggle.addEventListener('click', () => {
+document.querySelectorAll('.theme-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
         const ct = htmlElement.getAttribute('data-theme');
         const nt = ct === 'light' ? 'dark' : 'light';
         htmlElement.setAttribute('data-theme', nt);
         localStorage.setItem('theme', nt);
-        updateThemeIcon(nt);
+        updateThemeIcons(nt);
+    });
+});
+
+function updateThemeIcons(theme) {
+    document.querySelectorAll('.theme-toggle').forEach(btn => {
+        const icon = btn.querySelector('svg');
+        if (!icon) return;
+        if (theme === 'dark') {
+            icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+        } else {
+            icon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
+        }
     });
 }
 
-function updateThemeIcon(theme) {
-    if (!themeToggle) return;
-    const icon = themeToggle.querySelector('svg');
-    if (!icon) return;
-    if (theme === 'dark') {
-        icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
-    } else {
-        icon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
+// ═══════════════════════════════════════════
+// MODERN CYBER AMBIENT BACKGROUND
+// ═══════════════════════════════════════════
+function createAnimatedBackground() {
+    if (!document.querySelector('.animated-bg')) {
+        const animatedBg = document.createElement('div');
+        animatedBg.className = 'animated-bg';
+        document.body.prepend(animatedBg);
     }
 }
 
+createAnimatedBackground();
+initContentWaveCanvas();
+initHero3DCard();
+initCardSpotlights();
+initAppFilters();
+
 // ═══════════════════════════════════════════
-// NEON CANVAS BACKGROUND
+// IN-CONTENT INTERACTIVE HARMONIC WAVE CANVAS
+// (Matches user's reference oscilloscope waves)
 // ═══════════════════════════════════════════
-function createNeonCanvas() {
-    const canvas = document.createElement('canvas');
-    canvas.id = 'neon-bg-canvas';
-    canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none;';
-    document.body.prepend(canvas);
+function initContentWaveCanvas() {
+    const canvas = document.getElementById('content-wave-canvas');
+    if (!canvas) return;
     const ctx = canvas.getContext('2d');
-    let W, H, nodes = [];
+    const readout = document.getElementById('wave-freq-readout');
 
-    function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+    let W, H;
+    let step = 0;
+    let isHovered = false;
+    let mouse = { x: -1000, y: 70, targetX: -1000, targetY: 70, velocity: 0 };
+    let lastX = 0;
 
-    function initNodes(n) {
-        nodes = [];
-        for (let i = 0; i < n; i++) {
-            nodes.push({ x: Math.random()*W, y: Math.random()*H, vx: (Math.random()-0.5)*0.4, vy: (Math.random()-0.5)*0.4, r: Math.random()*1.8+0.5 });
+    function resize() {
+        const rect = canvas.getBoundingClientRect();
+        W = canvas.width = rect.width * (window.devicePixelRatio || 1);
+        H = canvas.height = 140 * (window.devicePixelRatio || 1);
+        ctx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+
+    // Mouse & Touch Interaction
+    function handleMove(clientX, clientY) {
+        const rect = canvas.getBoundingClientRect();
+        mouse.targetX = clientX - rect.left;
+        mouse.targetY = clientY - rect.top;
+        isHovered = true;
+
+        const dx = mouse.targetX - lastX;
+        mouse.velocity = Math.min(Math.abs(dx) * 0.4, 15);
+        lastX = mouse.targetX;
+
+        if (readout) {
+            const freqVal = (120 + (mouse.targetX / rect.width) * 60 + mouse.velocity * 3).toFixed(1);
+            readout.textContent = `${freqVal} Hz`;
         }
     }
 
-    function getCyanColor() {
-        return htmlElement.getAttribute('data-theme') === 'light' ? '0,112,187' : '0,245,255';
-    }
+    canvas.addEventListener('mousemove', (e) => handleMove(e.clientX, e.clientY));
+    canvas.addEventListener('touchmove', (e) => {
+        if (e.touches && e.touches[0]) handleMove(e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: true });
+
+    canvas.addEventListener('mouseleave', () => { isHovered = false; });
+    canvas.addEventListener('touchend', () => { isHovered = false; });
+
+    // The 4 Harmonic Waves matching the reference image
+    const waves = [
+        { colorLight: 'rgba(0, 112, 187, 0.85)',   colorDark: 'rgba(0, 245, 255, 0.9)',    freq: 0.007, speed: 0.035, amp: 26, phase: 0 },
+        { colorLight: 'rgba(114, 0, 187, 0.85)',   colorDark: 'rgba(192, 132, 252, 0.85)', freq: 0.009, speed: 0.028, amp: 32, phase: 1.8 },
+        { colorLight: 'rgba(37, 99, 235, 0.75)',   colorDark: 'rgba(96, 165, 250, 0.8)',   freq: 0.011, speed: 0.022, amp: 22, phase: 3.4 },
+        { colorLight: 'rgba(219, 39, 119, 0.75)',  colorDark: 'rgba(244, 114, 182, 0.8)',  freq: 0.008, speed: 0.040, amp: 28, phase: 4.9 }
+    ];
 
     function draw() {
-        ctx.clearRect(0, 0, W, H);
-        const c = getCyanColor();
+        const displayW = canvas.clientWidth;
+        const displayH = 140;
+        ctx.clearRect(0, 0, displayW, displayH);
 
-        // Subtle grid
-        ctx.strokeStyle = `rgba(${c},0.025)`;
-        ctx.lineWidth = 0.5;
-        const gs = 60;
-        for (let x = 0; x < W; x += gs) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
-        for (let y = 0; y < H; y += gs) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+        const isDark = htmlElement.getAttribute('data-theme') !== 'light';
+        const midY = displayH / 2;
+        step += 0.02;
 
-        nodes.forEach(n => {
-            n.x += n.vx; n.y += n.vy;
-            if (n.x < 0 || n.x > W) n.vx *= -1;
-            if (n.y < 0 || n.y > H) n.vy *= -1;
-        });
+        // Smooth cursor interpolation
+        mouse.x += (mouse.targetX - mouse.x) * 0.15;
+        mouse.y += (mouse.targetY - mouse.y) * 0.15;
+        mouse.velocity *= 0.95;
 
-        for (let i = 0; i < nodes.length; i++) {
-            for (let j = i + 1; j < nodes.length; j++) {
-                const dx = nodes[i].x - nodes[j].x;
-                const dy = nodes[i].y - nodes[j].y;
-                const d = Math.sqrt(dx*dx + dy*dy);
-                if (d < 130) {
-                    const alpha = (1 - d/130) * 0.18;
-                    ctx.strokeStyle = `rgba(${c},${alpha})`;
-                    ctx.lineWidth = 0.5;
-                    ctx.beginPath(); ctx.moveTo(nodes[i].x, nodes[i].y); ctx.lineTo(nodes[j].x, nodes[j].y); ctx.stroke();
-                }
-            }
+        // 1. Draw subtle background Cartesian grid
+        const gridColor = isDark ? 'rgba(0, 245, 255, 0.04)' : 'rgba(0, 112, 187, 0.04)';
+        const lineAccent = isDark ? 'rgba(0, 245, 255, 0.15)' : 'rgba(0, 112, 187, 0.15)';
+        ctx.strokeStyle = gridColor;
+        ctx.lineWidth = 1;
+
+        // Vertical grid lines
+        const stepX = 50;
+        for (let x = 0; x < displayW; x += stepX) {
+            ctx.beginPath();
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, displayH);
+            ctx.stroke();
         }
 
-        nodes.forEach(n => {
-            ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI*2);
-            ctx.fillStyle = `rgba(${c},0.4)`;
-            ctx.shadowColor = `rgba(${c},1)`;
-            ctx.shadowBlur = 6; ctx.fill(); ctx.shadowBlur = 0;
+        // Horizontal grid lines
+        const stepY = 28;
+        for (let y = 0; y < displayH; y += stepY) {
+            ctx.beginPath();
+            ctx.moveTo(0, y);
+            ctx.lineTo(displayW, y);
+            ctx.stroke();
+        }
+
+        // Baseline (center axis)
+        ctx.strokeStyle = lineAccent;
+        ctx.beginPath();
+        ctx.moveTo(0, midY);
+        ctx.lineTo(displayW, midY);
+        ctx.stroke();
+
+        // 2. Draw the 4 Harmonic Waves
+        const nodes = [];
+
+        waves.forEach((w, idx) => {
+            ctx.beginPath();
+            ctx.strokeStyle = isDark ? w.colorDark : w.colorLight;
+            ctx.lineWidth = 2;
+            ctx.shadowColor = isDark ? w.colorDark : w.colorLight;
+            ctx.shadowBlur = isDark ? 8 : 3;
+
+            for (let x = 0; x <= displayW; x += 3) {
+                // Base sine wave
+                let y = midY + Math.sin(x * w.freq + step * w.speed * 60 + w.phase) * w.amp;
+
+                // Mouse interaction displacement (Gaussian pluck envelope)
+                if (isHovered && mouse.x > 0) {
+                    const dist = Math.abs(x - mouse.x);
+                    if (dist < 140) {
+                        const envelope = Math.exp(-Math.pow(dist / 65, 2));
+                        const pull = (mouse.y - midY) * 0.85 + (Math.sin(dist * 0.1 - step * 5) * 8);
+                        y += pull * envelope;
+                    }
+                }
+
+                if (x === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+
+                // Sample points for decorative intersection nodes (matching image)
+                if (x % 150 === 0 && (idx === 0 || idx === 1)) {
+                    nodes.push({ x, y, color: isDark ? w.colorDark : w.colorLight });
+                }
+            }
+            ctx.stroke();
+            ctx.shadowBlur = 0;
         });
+
+        // 3. Draw decorative nodes (data points) matching the uploaded image
+        nodes.forEach(n => {
+            ctx.beginPath();
+            ctx.arc(n.x, n.y, 3.5, 0, Math.PI * 2);
+            ctx.fillStyle = n.color;
+            ctx.shadowColor = n.color;
+            ctx.shadowBlur = 6;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+
+            // Faint anchor ring
+            ctx.beginPath();
+            ctx.arc(n.x, n.y, 7, 0, Math.PI * 2);
+            ctx.strokeStyle = n.color.replace('0.9', '0.2').replace('0.85', '0.2');
+            ctx.lineWidth = 1;
+            ctx.stroke();
+        });
+
+        // 4. Cursor tracking line indicator when hovering
+        if (isHovered && mouse.x >= 0 && mouse.x <= displayW) {
+            ctx.strokeStyle = isDark ? 'rgba(0, 245, 255, 0.4)' : 'rgba(0, 112, 187, 0.4)';
+            ctx.setLineDash([4, 4]);
+            ctx.beginPath();
+            ctx.moveTo(mouse.x, 0);
+            ctx.lineTo(mouse.x, displayH);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Center tracking beacon
+            ctx.beginPath();
+            ctx.arc(mouse.x, mouse.y, 4, 0, Math.PI * 2);
+            ctx.fillStyle = '#00f5ff';
+            ctx.shadowColor = '#00f5ff';
+            ctx.shadowBlur = 10;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+        }
 
         requestAnimationFrame(draw);
     }
 
-    resize(); initNodes(window.innerWidth < 640 ? 40 : 80); draw();
-    window.addEventListener('resize', () => { resize(); initNodes(window.innerWidth < 640 ? 40 : 80); });
+    draw();
 }
 
 // ═══════════════════════════════════════════
-// ANIMATED BACKGROUND + PARTICLES
+// HERO 3D HOLOGRAPHIC CARD TILT PHYSICS
 // ═══════════════════════════════════════════
-function createAnimatedBackground() {
-    const animatedBg = document.createElement('div');
-    animatedBg.className = 'animated-bg';
-    document.body.appendChild(animatedBg);
-}
+function initHero3DCard() {
+    const wrapper = document.getElementById('hero3dWrapper');
+    const card = document.getElementById('hero3dCard');
+    const glare = document.getElementById('cardGlare');
+    if (!wrapper || !card) return;
 
-function createParticles() {
-    const particlesContainer = document.createElement('div');
-    particlesContainer.className = 'particles';
-    for (let i = 0; i < 18; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        const size = Math.random() * 4 + 1;
-        particle.style.width  = size + 'px';
-        particle.style.height = size + 'px';
-        particle.style.left   = Math.random() * 100 + '%';
-        particle.style.top    = Math.random() * 100 + '%';
-        particle.style.animationDelay    = Math.random() * 15 + 's';
-        particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
-        particlesContainer.appendChild(particle);
+    let bounds;
+
+    function refreshBounds() {
+        bounds = wrapper.getBoundingClientRect();
     }
-    document.body.appendChild(particlesContainer);
+
+    window.addEventListener('resize', refreshBounds);
+    window.addEventListener('scroll', refreshBounds, { passive: true });
+    refreshBounds();
+
+    function onMove(e) {
+        if (!bounds) refreshBounds();
+        const mouseX = e.clientX;
+        const mouseY = e.clientY;
+        const leftX = mouseX - bounds.x;
+        const topY = mouseY - bounds.y;
+        const center = {
+            x: leftX - bounds.width / 2,
+            y: topY - bounds.height / 2
+        };
+
+        const distance = Math.sqrt(center.x ** 2 + center.y ** 2);
+        const maxDist = Math.max(bounds.width, bounds.height) / 2;
+
+        // Rotation angles
+        const rotX = -(center.y / (bounds.height / 2)) * 14;
+        const rotY = (center.x / (bounds.width / 2)) * 14;
+
+        card.style.transform = `perspective(1000px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) scale3d(1.025, 1.025, 1.025)`;
+
+        // Glare shine positioning
+        if (glare) {
+            glare.style.background = `radial-gradient(circle at ${leftX}px ${topY}px, rgba(255, 255, 255, 0.22), transparent 60%)`;
+        }
+    }
+
+    function onLeave() {
+        card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+        if (glare) {
+            glare.style.background = 'transparent';
+        }
+    }
+
+    wrapper.addEventListener('mousemove', onMove);
+    wrapper.addEventListener('mouseleave', onLeave);
+
+    // Touch support for mobile
+    wrapper.addEventListener('touchmove', (e) => {
+        if (e.touches && e.touches[0]) onMove(e.touches[0]);
+    }, { passive: true });
+    wrapper.addEventListener('touchend', onLeave);
 }
 
-createAnimatedBackground();
-createParticles();
-createNeonCanvas();
+// ═══════════════════════════════════════════
+// MOUSE SPOTLIGHT ON CARDS
+// ═══════════════════════════════════════════
+function initCardSpotlights() {
+    const cards = document.querySelectorAll('.spotlight-card, .card, .marquee-card, .timeline-item > div');
+    cards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
+        });
+    });
+}
+
+// ═══════════════════════════════════════════
+// APP FILTER TABS
+// ═══════════════════════════════════════════
+function initAppFilters() {
+    const filterButtons = document.querySelectorAll('.app-filter-btn');
+    const appCards = document.querySelectorAll('.app-card-item');
+    if (!filterButtons.length) return;
+
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterButtons.forEach(b => {
+                b.classList.remove('active');
+                b.style.borderColor = 'var(--dark-border)';
+                b.style.color = 'var(--text-secondary)';
+                b.style.background = 'transparent';
+            });
+            btn.classList.add('active');
+            btn.style.borderColor = 'var(--neon-cyan)';
+            btn.style.color = 'var(--neon-cyan)';
+            btn.style.background = 'rgba(0, 245, 255, 0.08)';
+
+            const filter = btn.getAttribute('data-filter');
+            appCards.forEach(card => {
+                const platform = card.getAttribute('data-platform') || '';
+                if (filter === 'all' || platform.includes(filter)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+}
 
 // ═══════════════════════════════════════════
 // SMOOTH SCROLL
@@ -229,6 +442,10 @@ fadeElements.forEach(element => observer.observe(element));
 // READ MORE / CONTENT TOGGLE
 // ═══════════════════════════════════════════
 const contentStore = {
+    'gemini-summary-app-1': "Khmer Book Label Studio (KH Book Label Maker) is an automated Windows desktop application designed to generate professional student book labels. Featuring authentic traditional Khmer decorative frames (Kbach), custom field layouts, school logos, and automated grid distribution on standard A4 paper, it eliminates tedious manual formatting. Published on Microsoft Store, with Google Play in closed testing.",
+    'gemini-summary-app-2': "CV Builder Pro is an intuitive mobile resume maker featuring ATS-compliant modern templates, dynamic sections, live instant preview, and high-performance PDF export. Designed to help professionals and graduates craft employer-ready CVs in minutes. Live in production on Google Play with Microsoft Store desktop edition planned.",
+    'gemini-summary-app-3': "Chemistry Match is an educational science matching game designed to help students master chemical elements, atomic numbers, valence bonds, and reaction formulas through interactive puzzles. Available across desktop and mobile, live on both Microsoft Store and Google Play.",
+    'gemini-summary-app-4': "Khmer Frame Name Maker empowers users to craft personalized Khmer name typography enveloped in exquisite traditional ornamental borders. Perfect for avatar creation, holiday greetings, and cultural celebrations. Live on Google Play with Microsoft Store version planned.",
     'gemini-summary-1': "This intelligent Telegram bot suite, built with Python and the python-telegram-bot library, offers diverse tools to simplify daily life. From task management and reminders to solving chemistry problems, performing math calculations, providing English synonyms, converting text to MP3, auto-reacting with emojis, and sharing useful information—each bot uses smart automation and natural language processing to create seamless, engaging interactions.",
     'gemini-summary-2': "A portfolio of graphic design projects, highlighting skills in branding, illustration, and visual communication. Expertise in Adobe Creative Suite (Photoshop, Illustrator) is used to develop compelling visual narratives and marketing assets.",
     'gemini-summary-3': "This showcase highlights practical SAP Business One development projects focused on enhancing business processes and user workflows. It includes custom reports, transaction notifications, FMS logic, and seamless system integrations—crafted to support real-world ERP needs with a focus on usability, efficiency, and business impact.",

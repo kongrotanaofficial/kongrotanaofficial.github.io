@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAP Business One ERP Development | Rotana.dev</title>
+    <meta name="description" content="Custom queries, formatted searches (FMS), SQL transaction notifications, Crystal Reports, and external integration for SAP Business One ERP.">
+    <link rel="icon" href="../img/SAP.jpg" type="image/jpeg">
+    <link rel="stylesheet" href="../style/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .native-window {
+            background: var(--card-surface);
+            backdrop-filter: blur(28px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+            overflow: hidden;
+        }
+        .window-header {
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .traffic-dots { display: flex; align-items: center; gap: 7px; }
+        .traffic-dot { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        .feature-card {
+            background: var(--card-surface);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            backdrop-filter: blur(16px);
+        }
+        .feature-card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(59, 130, 246, 0.15);
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-100 selection:bg-blue-500/30 selection:text-blue-200">
+    <div class="animated-bg"></div>
+
+    <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <a href="../index.html" class="flex items-center gap-3 group text-decoration-none">
+                    <div class="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 group-hover:scale-105 transition-transform shadow-[0_0_15px_rgba(59,130,246,0.2)]">
+                        <i class="fas fa-terminal text-sm"></i>
+                    </div>
+                    <div>
+                        <span class="font-mono text-base font-bold text-white group-hover:text-blue-400 transition-colors">Rotana<span class="text-blue-400">.dev</span></span>
+                        <div class="text-[10px] font-mono text-slate-400 -mt-1">Native Platform Portfolio</div>
+                    </div>
+                </a>
+
+                <div class="flex items-center gap-3">
+                    <a href="../index.html#projects" class="nav-link flex items-center gap-2">
+                        <i class="fas fa-arrow-left text-xs"></i>
+                        <span>Back to Projects</span>
+                    </a>
+                    <a href="https://buymeacoffee.com/kongrotana" target="_blank" rel="noopener noreferrer" class="btn-coffee hidden sm:inline-flex" title="Support on Buy Me a Coffee">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 5h-2V5h2v3zM4 19h16v2H4z"/></svg>
+                        <span>Buy Coffee</span>
+                    </a>
+                    <button id="themeToggleBtn" class="theme-toggle relative !top-0 !right-0" title="Toggle Theme">
+                        <svg class="sun-icon hidden" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                        <svg class="moon-icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="pt-32 pb-24">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+
+            <div class="flex items-center gap-2 text-xs font-mono text-slate-400 mb-8">
+                <a href="../index.html" class="hover:text-blue-400 transition-colors">Home</a>
+                <span>/</span>
+                <a href="../index.html#projects" class="hover:text-blue-400 transition-colors">Systems &amp; Creative Works</a>
+                <span>/</span>
+                <span class="text-blue-400 font-semibold">SAP B1 Development</span>
+            </div>
+
+            <!-- Hero -->
+            <div class="native-window mb-12 p-8 sm:p-12">
+                <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                        <img src="../img/SAP.jpg" alt="SAP Business One" class="w-24 h-24 rounded-2xl object-cover border-2 border-blue-400/40 shadow-lg flex-shrink-0">
+                        <div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="status-badge live"><span class="status-dot"></span>Enterprise Solutions</span>
+                                <span class="text-xs font-mono text-blue-400 px-2 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/30">SQL Server · HANA</span>
+                            </div>
+                            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-2">
+                                SAP Business One ERP Development
+                            </h1>
+                            <p class="text-base sm:text-lg font-mono text-blue-400 mb-4">
+                                Enterprise Business Logic, Automation &amp; Database Architecture
+                            </p>
+                            <p class="text-slate-300 text-sm sm:text-base max-w-2xl leading-relaxed">
+                                Professional ERP development solutions delivering business rules enforcement, financial compliance, automated stock valuation, customized marketing documents, and bi-directional API synchronizations.
+                            </p>
+                        </div>
+                    </div>
+
+                    <a href="https://chromewebstore.google.com/detail/sap-b1-table-finder/elggmajabegcpcgnkgeopagplppehbbf?utm_source=item-share-cb" target="_blank" rel="noopener noreferrer" class="btn btn-primary !py-3.5 !px-6 flex items-center justify-center gap-2 flex-shrink-0">
+                        <i class="fab fa-chrome text-lg"></i>
+                        <span>SAP B1 Table Finder Extension</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Features -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+                <div class="feature-card">
+                    <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 text-xl mb-4">
+                        <i class="fas fa-shield-virus"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Transaction Notifications (SBO_SP)</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Strict data validation and business policy enforcement directly at the SQL database layer to prevent invalid entries, duplicate documents, and unauthorized discounts.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 text-xl mb-4">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Formatted Searches (FMS)</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Real-time dynamic field calculation, automated pricing tiers, currency conversion lookup, and linked field populating upon header or row modification.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="w-12 h-12 rounded-xl bg-green-500/10 border border-green-500/30 flex items-center justify-center text-green-400 text-xl mb-4">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Crystal Reports &amp; Analytics</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Executive dashboards, VAT sales invoices, automated payment vouchers, inventory aging matrices, and audit trial logs.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Published Tool Spotlight -->
+            <div class="native-window p-8">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div>
+                        <div class="text-xs font-mono text-blue-400 uppercase tracking-widest mb-1">// COMPANION DEVELOPER TOOL</div>
+                        <h3 class="text-2xl font-bold text-white mb-2">SAP B1 Table Finder Extension</h3>
+                        <p class="text-slate-400 text-sm max-w-xl">
+                            Created and published a specialized browser extension available on Google Chrome and Microsoft Edge to help ERP consultants and developers quickly look up SAP B1 database tables and field schemas.
+                        </p>
+                    </div>
+                    <div class="flex gap-3">
+                        <a href="https://chromewebstore.google.com/detail/sap-b1-table-finder/elggmajabegcpcgnkgeopagplppehbbf" target="_blank" class="btn btn-primary text-xs">
+                            <i class="fab fa-chrome mr-1"></i> Chrome Store
+                        </a>
+                        <a href="https://microsoftedge.microsoft.com/addons/detail/sap-b1-table-finder/fefjchffofgkijkkbilcpmboiacanpfi" target="_blank" class="btn btn-secondary text-xs">
+                            <i class="fab fa-edge mr-1"></i> Edge Addons
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="py-12 border-t border-white/10 bg-slate-950/80">
+        <div class="container mx-auto px-4 text-center">
+            <a href="../index.html" class="font-mono text-lg font-bold text-white hover:text-blue-400 transition-colors">
+                Rotana<span class="text-blue-400">.dev</span>
+            </a>
+            <p class="text-slate-400 text-xs font-mono mt-2 mb-4">© <span id="currentYear"></span> Kong Rotana. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        const themeBtn = document.getElementById('themeToggleBtn');
+        const html = document.documentElement;
+        const sun = themeBtn.querySelector('.sun-icon');
+        const moon = themeBtn.querySelector('.moon-icon');
+
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        applyTheme(savedTheme);
+
+        themeBtn.addEventListener('click', () => {
+            const current = html.getAttribute('data-theme') || 'dark';
+            const next = current === 'dark' ? 'light' : 'dark';
+            applyTheme(next);
+            localStorage.setItem('theme', next);
+        });
+
+        function applyTheme(theme) {
+            html.setAttribute('data-theme', theme);
+            if (theme === 'light') {
+                sun.classList.remove('hidden');
+                moon.classList.add('hidden');
+            } else {
+                sun.classList.add('hidden');
+                moon.classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
